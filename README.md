@@ -2,8 +2,6 @@
 
 ## Descrição do Projeto
 
-## Descrição do Projeto: appFAQCursoADS
-
 O **appFAQCursoADS** é uma aplicação desenvolvida com fins didáticos para a disciplina de Implantação de Servidores no curso de Análise e Desenvolvimento de Sistemas. Seu objetivo principal é demonstrar a aplicação prática de tecnologias modernas de infraestrutura e orquestração de serviços, replicando cenários e desafios reais do mercado de tecnologia.
 
 Este projeto consiste em um sistema de FAQ (Frequently Asked Questions) robusto e eficiente, construído sobre uma arquitetura modular e escalável, baseada em contêineres Docker. A aplicação permite o gerenciamento completo do ciclo de vida de perguntas e respostas, desde o cadastro de novas dúvidas por usuários até a publicação de respostas por especialistas.
