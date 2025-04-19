@@ -2,37 +2,38 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:latest
+    build: ./bd
     container_name: faq_db_container
     environment:
       POSTGRES_USER: faq_app
-      POSTGRES_PASSWORD: sua_senha_segura
+      POSTGRES_PASSWORD: app_curso_faat
       POSTGRES_DB: faq_db
     volumes:
       - faq-postgres-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./bd/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
-      - "5432:5432"
+      - "2000:5432"
     networks:
       - faq-net
 
   app:
-    build: .
+    build: ./app
     container_name: faq_app_container
     environment:
       DATABASE_URL: postgres://faq_app:sua_senha_segura@db:5432/faq_db
     ports:
       - "3000:3000"
+      - "8501:8501"
     depends_on:
       - db
     networks:
       - faq-net
 
   prometheus:
-    image: prom/prometheus:latest
+    build: ./Prometheus
     container_name: faq_prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - faq-prometheus-data:/prometheus
     ports:
       - "9090:9090"
@@ -40,12 +41,12 @@ services:
       - faq-net
 
   grafana:
-    image: grafana/grafana:latest
+    build: ./Grafana
     container_name: faq_grafana
     volumes:
       - faq-grafana-data:/var/lib/grafana
     ports:
-      - "3000:3000"
+      - "3001:3000" # Alterado para mapear a porta 3000 do contêiner para a porta 3001 no host
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: "true" # Para acesso mais fácil em desenvolvimento
     depends_on:
@@ -54,7 +55,7 @@ services:
       - faq-net
 
   postgres-exporter:
-    image: prom/postgres-exporter:latest
+    image: bitnami/postgres-exporter:latest
     container_name: faq_postgres_exporter
     environment:
       DATA_SOURCE_NAME: postgres://faq_app:sua_senha_segura@db:5432/faq_db

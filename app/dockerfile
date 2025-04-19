@@ -1,13 +1,17 @@
-FROM node:22-alpine
+FROM python:latest
 
+# Diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN npm install
-
+# Copiar os arquivos necessários para o contêiner
+COPY requirements.txt ./
 COPY . .
 
-EXPOSE 3000
+# Instalar as dependências
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["npm", "start"]
+# Expor a porta padrão do Streamlit
+EXPOSE 8501
+
+# Comando para iniciar o aplicativo Streamlit
+CMD ["streamlit", "run", "faq_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
